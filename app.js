@@ -1,3 +1,4 @@
+const Employee = require("./lib/Employee");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
@@ -10,6 +11,78 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+
+function getEmployees() {
+
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "name",
+            message: "What is your name?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is your id?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is your email?"
+        },
+        {
+            type: "list",
+            name: "role",
+            message: "What is your role?",
+            choices: [
+                "Manager",
+                "Engineer",
+                "Intern"
+            ]
+        },
+        {
+            type: "input",
+            name: "office_number",
+            message: "What is your office number?",
+            when: function (answers) {
+                return answers.role === "Manager"
+            }
+        },
+        {
+            type: "input",
+            name: "school",
+            message: "What school do you attend?",
+            when: function (answers) {
+                return answers.role === "Intern"
+            }
+        },
+        {
+            type: "input",
+            name: "github_profile",
+            message: "What is your github profile?",
+            when: function (answers) {
+                return answers.role === "Engineer"
+            }
+        },
+        {
+            type: "list",
+            name: "another",
+            message: "Do you want to add another employee?",
+            choices: [
+                "Yes",
+                "No"
+            ]
+        }
+    ]).then((answers) => {
+        if (answers.another === "Yes") {
+            getEmployees()
+        } else {
+            render(Employee);
+        }
+    });
+};
+
+getEmployees();
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
