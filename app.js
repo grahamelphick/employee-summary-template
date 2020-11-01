@@ -12,6 +12,9 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 
 const employeesArray = [];
+const managerArray = [];
+const engineerArray = [];
+const internArray = [];
 
 
 function getEmployees() {
@@ -80,21 +83,26 @@ function getEmployees() {
         // const newEmployee = new Employee(answers.name, answers.id, answers.email);
         // employeesArray.push(newEmployee);
 
-        const newManager = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
-        employeesArray.push(newManager);
+        if (answers.role === "Manager") {
+            const newManager = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+            employeesArray.push(newManager);
+        } else if (answers.role === "Engineer") {
+            const newEngineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
+            employeesArray.push(newEngineer);
+        } else {
+            const newIntern = new Intern(answers.name, answers.id, answers.email, answers.school);
+            employeesArray.push(newIntern);
+        }
 
-        const newEngineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
-        employeesArray.push(newEngineer);
-
-        const newIntern = new Intern(answers.name, answers.id, answers.email, answers.school);
-        employeesArray.push(newIntern);
 
 
-        console.log(employeesArray);
+
+
+        // console.log(employeesArray);
         if (answers.another === "Yes") {
             getEmployees()
         } else {
-            console.log(render(employeesArray));
+            // console.log(render(employeesArray));
             fs.writeFile(outputPath, render(employeesArray), err => {
                 if (err) {
                     console.log(err);
