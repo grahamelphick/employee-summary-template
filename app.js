@@ -11,10 +11,22 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const employeesArray = [];
+
 
 function getEmployees() {
 
     inquirer.prompt([
+        {
+            type: "list",
+            name: "role",
+            message: "What is your role?",
+            choices: [
+                "Manager",
+                "Engineer",
+                "Intern"
+            ]
+        },
         {
             type: "input",
             name: "name",
@@ -30,19 +42,10 @@ function getEmployees() {
             name: "email",
             message: "What is your email?"
         },
-        {
-            type: "list",
-            name: "role",
-            message: "What is your role?",
-            choices: [
-                "Manager",
-                "Engineer",
-                "Intern"
-            ]
-        },
+
         {
             type: "input",
-            name: "office_number",
+            name: "officeNumber",
             message: "What is your office number?",
             when: function (answers) {
                 return answers.role === "Manager"
@@ -58,7 +61,7 @@ function getEmployees() {
         },
         {
             type: "input",
-            name: "github_profile",
+            name: "github",
             message: "What is your github profile?",
             when: function (answers) {
                 return answers.role === "Engineer"
@@ -74,10 +77,30 @@ function getEmployees() {
             ]
         }
     ]).then((answers) => {
+        // const newEmployee = new Employee(answers.name, answers.id, answers.email);
+        // employeesArray.push(newEmployee);
+
+        const newManager = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+        employeesArray.push(newManager);
+
+        const newEngineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
+        employeesArray.push(newEngineer);
+
+        const newIntern = new Intern(answers.name, answers.id, answers.email, answers.school);
+        employeesArray.push(newIntern);
+
+
+        console.log(employeesArray);
         if (answers.another === "Yes") {
             getEmployees()
         } else {
-            render(Employee);
+            console.log(render(employeesArray));
+            fs.writeFile(outputPath, render(employeesArray), err => {
+                if (err) {
+                    console.log(err);
+                }
+                console.log("Done!")
+            });
         }
     });
 };
@@ -89,7 +112,7 @@ getEmployees();
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
+// generate and return a block of HTML including templated divs for each employee! 
 
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
