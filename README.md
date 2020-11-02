@@ -8,8 +8,6 @@ This application allows the user to enter information to create a summary of all
 
 * [Usage](#usage)
 
-* [Contribution Guidelines](#contribution-guidelines)
-
 * [Test Instructions](#test-instructions)
 
 * [Demonstration Video](#demonstration-video)
